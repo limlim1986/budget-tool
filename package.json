@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/limlim1986/budget-tool/issues"
   },
-  "homepage": "https://github.com/limlim1986/budget-tool#readme"
+  "homepage": "https://github.com/limlim1986/budget-tool#readme",
+  "dependencies": {
+    "lodash": "^4.17.21"
+  }
 }
