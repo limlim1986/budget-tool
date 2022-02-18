@@ -76,7 +76,7 @@ var debitableHoursPerDay = (startDate, endDate) => {
             Day: date,
             Hours: isWeekend ? 0 : 8,
             Month: date.getMonth() + 1,
-            Year: date.getYear()
+            Year: date.getFullYear()
         });
     });
 
@@ -86,8 +86,8 @@ var debitableHoursPerDay = (startDate, endDate) => {
 var maximumDebitableHoursGrouped = (debitableHoursPerDay, groupedBy) => {
     var groupedByMonth = _(debitableHoursPerDay)
         .groupBy(groupedBy)
-        .map((item, Month) => ({
-            month: Month,
+        .map((item, timeFrame) => ({
+            timeFrame: timeFrame,
             totalHours: _.sumBy(item, "Hours")
         }))
         .value();
@@ -118,7 +118,7 @@ let defaultEducation = () => {
     return defaultEducation;
 }
 
-var dhpd = debitableHoursPerDay(new Date(2022, 0, 1), new Date(2022, 11, 31));
+let dhpd = debitableHoursPerDay(new Date(2022, 0, 1), new Date(2022, 11, 31));
 
 let containsDate = (arrayOfDates, item) => {
     return arrayOfDates.some(date => 
@@ -127,7 +127,7 @@ let containsDate = (arrayOfDates, item) => {
         && date.getYear() === item.getYear()) 
 };
 
-var debitableHoursPerDayWithRemovedHolidays = dhpd.filter((item) => {
+let debitableHoursPerDayWithRemovedHolidays = dhpd.filter((item) => {
     let nonDebitableDays = defaultHolidays().concat(defaultSickness(), defaultEducation());
     
     if(containsDate(nonDebitableDays, item.Day)){
@@ -156,4 +156,59 @@ let employee = new Employee(25, new Date(2022, 1, 1), new Date(2025, 1, 1), 800,
 // console.log("////////////////////////////////////////////");
 
 
-// how to calculate 
+// how to calculate salary and show what employees get
+// list all costs/benefits
+// education (fixed)
+// office supplies & software licences (fixed)
+// salary (calculated based on houerly rate)
+// pension (calculated based on salary)
+// vacation pay (statement)
+// sick pay (statement)
+
+// input hourly rate(excl moms) 
+// calculate income per year
+    
+// calculate costs
+    // x + 0.32x + 0.01x + 100000 = 800 * 1640 * 0.8 *
+    // 1.36x = 800 * 1640 * 0.85 - 100000
+    // x = rate 
+    // x = salary pension and fees 
+    // fixed costs
+
+let salary = (employeerContribution, pension, rate, debitedHours, fixedCosts, shiftkeyMargin, bonus) => {
+    let income = rate * debitedHours;
+    let incomeAfterFixedCosts = income - fixedCosts;
+    let incomeAfterMarginPerMonth = (incomeAfterFixedCosts*(1-shiftkeyMargin))/12;
+    let leftForSalary = incomeAfterMarginPerMonth/(1+employeerContribution+pension);
+    let onePart = leftForSalary/((1+bonus)*100);
+    let salaryExcludingBonus = onePart * 100;
+    let salaryIncludingBonus = salaryExcludingBonus + (salaryExcludingBonus*bonus);
+    return { 
+        baseSalary: Math.round(salaryExcludingBonus/1000)*1000,
+        salaryWithBonus: Math.round(salaryIncludingBonus/1000)*1000
+    };
+};
+
+let rates = [
+    { role: "straighFromSchool", rate: 600 },
+    { role: "junior", rate: 700 },
+    { role: "medium", rate: 800 },
+    { role: "senior", rate: 900 },
+    { role: "expert", rate: 1000 },
+];
+
+let employeerContribution = 0.32;
+let pension1 = 0.1;
+let shiftkeyMargin = 0.15;
+let fixedCosts = 100000;
+let bonus = 0.12;
+
+rates.forEach((item) => {
+    let salarys = salary(employeerContribution, pension1, item.rate, yearly[0].totalHours, fixedCosts, shiftkeyMargin, bonus);
+    console.log("/////////////////////  Role: " + item.role + " /////////////////////////////");
+    console.log("Rate: " + item.rate + "kr/h");
+    console.log("Base Salary: " + salarys.baseSalary);
+    console.log("Salary with bonus "+ bonus*100 + "% : " + salarys.salaryWithBonus);
+    console.log("///////////////////////////////////////////////////////////////////////////");
+    console.log("");
+});
