@@ -1,11 +1,7 @@
 const _ = require("lodash");
 
-var employerContribution = 31.42;
-var wellnessAllowance = 5000;
-var delayInMonthsForInvoiceToBePaid = 3;
+var employerContributionPercentage = 31.42;
 var incomeBaseAmount = 71000;
-var incomeTaxPercentage = 30;
-var employeOfficeSuppliesPerYear = 30000;
 
 class Employee {
     constructor(age,
@@ -39,9 +35,8 @@ var calculatePensionCostPerMonth = (salary) => {
     return pension;
 }
 
-var calculateMonthlyIncome = (debitedHours, rate) => {
-    // for each month get debited hours
-    return debitedHours * rate
+var calculateIncome = (debitedHours, rate) => {
+    return debitedHours * rate;
 };
 
 var calculateDebitedHours = (startDate, endDate, employee) => {
@@ -104,7 +99,7 @@ let defaultHolidays = () => {
 
 let defaultBenchTime = () => {
     let defaultBenchTime = [];
-    //defaultBenchTime.push(...getDatesBetween(new Date(2022, 8, 1), new Date(2022, 8, 15)));
+    defaultBenchTime.push(...getDatesBetween(new Date(2022, 8, 1), new Date(2022, 8, 15)));
     return defaultBenchTime;
 };
 
@@ -134,7 +129,7 @@ let containsDate = (arrayOfDates, item) => {
         && date.getYear() === item.getYear())
 };
 
-let debitableHoursPerDayWithRemovedHolidays = dhpd.filter((item) => {
+let debitableHoursPerDayRemoveNonWorkingDays = dhpd.filter((item) => {
     let nonDebitableDays = defaultHolidays().concat(
         defaultSickness(),
         defaultEducation(),
@@ -148,9 +143,7 @@ let debitableHoursPerDayWithRemovedHolidays = dhpd.filter((item) => {
     }
 })
 
-var maximumDebitableHoursPerMonth = maximumDebitableHoursGrouped(debitableHoursPerDayWithRemovedHolidays, "Month");
-var yearly = maximumDebitableHoursGrouped(debitableHoursPerDayWithRemovedHolidays, "Year");
-let employee = new Employee(25, new Date(2022, 1, 1), new Date(2025, 1, 1), 800, 90, [6, 12], 0, 55000);
+var yearly = maximumDebitableHoursGrouped(debitableHoursPerDayRemoveNonWorkingDays, "Year");
 
 // how to calculate salary and show what employees get
 // list all costs/benefits
@@ -161,22 +154,54 @@ let employee = new Employee(25, new Date(2022, 1, 1), new Date(2025, 1, 1), 800,
 // vacation pay (statement)
 // sick pay (statement)
 
-let salary = (employeerContribution, pension, rate, debitedHours, fixedCosts, shiftkeyMargin, bonus) => {
-    let income = rate * debitedHours;
-    let incomeAfterFixedCosts = income - fixedCosts;
-    let incomeAfterMarginPerMonth = (incomeAfterFixedCosts * (1 - shiftkeyMargin)) / 12;
-    let leftForSalary = incomeAfterMarginPerMonth / (1 + employeerContribution + pension);
+let getFixedCosts = () => {
+    let fixedCosts = [];
+    fixedCosts.push(
+        { name: "wellnessAllowance", amount: 5000 },
+        { name: "ComputerAndPhone", amount: 30000 }, 
+        { name: "Education", amount: 30000 },
+        { name: "Conferences", amount: 20000 },
+        { name: "SoftwareAndLicences", amount: 10000 },
+        { name: "Bookkeeping", amount: 10000 },
+        { name: "AWandParties", amount: 10000 },
+        { name: "Office", amount: 3000 }
+    );
+
+    return fixedCosts;
+}
+
+let roundToThousands = (number) => {
+    return Math.round(number / 1000)*1000;
+};
+
+let deductFixedCosts = (number, fixedCosts) => {
+    return number - _.sumBy(fixedCosts, 'amount');
+};
+
+let deductCompanyMargin = (number, companyMarginPercentage) => {
+    return Math.floor(number * (1 - (companyMarginPercentage/100)) / 1); 
+}
+
+let deductTaxesAndPension = (number, employeerContributionPercentage, pensionPercentage) => {
+    return number / (1+(employeerContributionPercentage/100)+(pensionPercentage/100));
+}
+
+let getSalaries = (employeerContributionPercentage, pensionPercentage, rate, debitedHours, fixedCosts, companyMarginPercentage, bonus) => {
+    let income = calculateIncome(debitedHours, rate);
+    let incomeAfterFixedCosts = deductFixedCosts(income, fixedCosts)
+    let incomeAfterMarginPerMonth = deductCompanyMargin(incomeAfterFixedCosts, companyMarginPercentage) / 12;
+    let leftForSalary = deductTaxesAndPension(incomeAfterMarginPerMonth, employeerContributionPercentage, pensionPercentage);
     let onePart = leftForSalary / ((1 + bonus) * 100);
     let salaryExcludingBonus = onePart * 100;
     let salaryIncludingBonus = salaryExcludingBonus + (salaryExcludingBonus * bonus);
 
     return {
-        baseSalary: Math.round(salaryExcludingBonus / 1000) * 1000,
-        salaryWithBonus: Math.round(salaryIncludingBonus / 1000) * 1000
+        baseSalary: roundToThousands(salaryExcludingBonus),
+        salaryWithBonus: roundToThousands(salaryIncludingBonus)
     };
 };
 
-let rates = [
+let rolesAndRates = [
     { role: "straighFromSchool", rate: 600 },
     { role: "junior", rate: 700 },
     { role: "medium", rate: 800 },
@@ -184,19 +209,18 @@ let rates = [
     { role: "expert", rate: 1000 },
 ];
 
-let employeerContribution = 0.32;
-let pension1 = 0.075;
-let shiftkeyMargin = 0.15;
-let fixedCosts = 120000;
-let bonus = 0.12;
+var employerContributionPercentage = 31.42;
+let pensionPercentage = 7.5;
+let companyMarginPercentage = 15;
+let bonusPercentage = 0.12;
 
-rates.forEach((item) => {
-    let salarys = salary(employeerContribution, pension1, item.rate, yearly[0].totalHours, fixedCosts, shiftkeyMargin, bonus);
+rolesAndRates.forEach((item) => {
+    let salaries = getSalaries(employerContributionPercentage, pensionPercentage, item.rate, yearly[0].totalHours, getFixedCosts(), companyMarginPercentage, bonusPercentage);
     console.log("/////////////////////  Role: " + item.role + " /////////////////////////////");
     console.log("Rate: " + item.rate + "kr/h");
-    console.log("Base Salary: " + salarys.baseSalary);
-    console.log("Salary with bonus " + bonus * 100 + "% : " + salarys.salaryWithBonus);
-    console.log("pension: " + calculatePensionCostPerMonth(salarys.baseSalary));
+    console.log("Base Salary: " + salaries.baseSalary);
+    console.log("Salary with bonus " + bonusPercentage * 100 + "% : " + salaries.salaryWithBonus);
+    console.log("pension: " + Math.floor(calculatePensionCostPerMonth(salaries.salaryWithBonus)/100)*100);
     console.log("///////////////////////////////////////////////////////////////////////////");
     console.log("");
 });
