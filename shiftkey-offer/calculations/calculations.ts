@@ -191,13 +191,15 @@ rolesAndRates.forEach((item) => {
 });
 
 export const getInfo = () => {
-    const info: { baseSalary: number; salaryInclBonus: number; pension: number; }[] = [];
+    const info: { role: string; rate: number; baseSalary: number; salaryInclBonus: number; pension: number; }[] = [];
     rolesAndRates.forEach((item) => {
         let baseSalary = getBaseSalary(employerContributionPercentage, pensionPercentage, item.rate, yearly[0].totalHours, companyMarginPercentage, bonusPercentage);
         let salaryInclBonus = getSalaryIncludingBonus(baseSalary, bonusPercentage);
         let pension = calculatePensionCostPerMonth(salaryInclBonus);
 
         info.push({
+            role: item.role,
+            rate: item.rate,
             baseSalary,
             salaryInclBonus,
             pension

@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 import { getInfo } from '../calculations/calculations';
 
 const Home: NextPage = () => {
-  const [count, setCount] = useState(getInfo());
+  const [offerInfos, setCount] = useState(getInfo());
 
   return (
     <div className={styles.container}>
@@ -17,7 +17,17 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        {JSON.stringify(count)}
+          <div>
+            {offerInfos.map(offerInfo => (
+              <div key={offerInfo.role}>
+                <div>{offerInfo.role}</div>
+                <div>{offerInfo.rate}</div>
+                <div>{offerInfo.baseSalary}</div>
+                <div>{offerInfo.salaryInclBonus}</div>
+                <div>{offerInfo.pension}</div>
+              </div>
+            ))}
+          </div>
       </main>
 
       <footer className={styles.footer}>
