@@ -1,5 +1,21 @@
 import _ from "lodash";
 
+type FixedCost = {
+    name: string;
+    amount: number;
+};
+
+type CalculationResult = {
+    role: string;
+    rate: number;
+    baseSalary: number;
+    salaryInclBonus: number;
+    pension: number;
+    fixedCosts: FixedCost[];
+    shiftkeyShare: number;
+    totalDebited: number;
+};
+
 const calculatePensionCostPerMonth = (salary: number) => {
     const incomeBaseAmount = 71000;
     var monthlySalaryBreakpoint = (incomeBaseAmount * 7.5) / 12;
@@ -10,7 +26,7 @@ const calculatePensionCostPerMonth = (salary: number) => {
     }
 
     pension += salary * 0.045;
-    return Math.floor(pension/100)*100;
+    return Math.floor(pension / 100) * 100;
 }
 
 const getTotalIncome = (debitedHours: number, rate: number) => {
@@ -100,7 +116,7 @@ const containsDate = (arrayOfDates: any[], item: Date) => {
         && date.getFullYear() === item.getFullYear())
 };
 
-let debitableHoursPerDayRemoveNonWorkingDays = dhpd.filter((item) => {
+let debitableHoursPerDayNonWorkingDaysRemoved = dhpd.filter((item) => {
     let nonDebitableDays = defaultHolidays().concat(
         defaultSickness(),
         defaultEducation(),
@@ -114,13 +130,13 @@ let debitableHoursPerDayRemoveNonWorkingDays = dhpd.filter((item) => {
     }
 })
 
-let yearly = maximumDebitableHoursGrouped(debitableHoursPerDayRemoveNonWorkingDays, "Year");
+let yearly = maximumDebitableHoursGrouped(debitableHoursPerDayNonWorkingDaysRemoved, "Year");
 
 let getFixedCosts = () => {
-    let fixedCosts = [];
+    let fixedCosts: FixedCost[] = [];
     fixedCosts.push(
         { name: "WellnessAllowance", amount: 5000 },
-        { name: "ComputerAndPhone", amount: 30000 }, 
+        { name: "ComputerAndPhone", amount: 30000 },
         { name: "Education", amount: 30000 },
         { name: "Conferences", amount: 20000 },
         { name: "SoftwareAndLicences", amount: 10000 },
@@ -133,7 +149,7 @@ let getFixedCosts = () => {
 }
 
 let roundToThousands = (number: number) => {
-    return Math.round(number / 1000)*1000;
+    return Math.round(number / 1000) * 1000;
 };
 
 let deductFixedCosts = (number: number, fixedCosts: any) => {
@@ -141,31 +157,36 @@ let deductFixedCosts = (number: number, fixedCosts: any) => {
 };
 
 let deductCompanyMargin = (number: number, companyMarginPercentage: number) => {
-    return Math.floor(number * (1 - (companyMarginPercentage/100)) / 1); 
+    return Math.floor(number * (1 - (companyMarginPercentage / 100)) / 1);
 };
 
 let deductTaxesAndPension = (number: number, employeerContributionPercentage: number, pensionPercentage: number) => {
-    return number / (1+(employeerContributionPercentage/100)+(pensionPercentage/100));
+    return number / (1 + (employeerContributionPercentage / 100) + (pensionPercentage / 100));
 };
 let deductBonusPercentage = (number: number, bonusPercentage: number) => {
-    return (number / ((1 + (bonusPercentage/100)) * 100)) * 100;
+    return (number / ((1 + (bonusPercentage / 100)) * 100)) * 100;
 };
 
 let getBaseSalary = (employeerContributionPercentage: number, pensionPercentage: number, rate: number, debitedHours: any, companyMarginPercentage: number, bonusPercentage: number) => {
     let income = getTotalIncome(debitedHours, rate);
-    let incomeAfterMarginPerMonth = deductCompanyMargin(income, companyMarginPercentage) / 12;
-    let leftForSalary = deductTaxesAndPension(incomeAfterMarginPerMonth, employeerContributionPercentage, pensionPercentage);
+    let incomeAfterCompanyMargin = deductCompanyMargin(income, companyMarginPercentage) / 12;
+    let leftForSalary = deductTaxesAndPension(incomeAfterCompanyMargin, employeerContributionPercentage, pensionPercentage);
     let salaryExcludingBonus = deductBonusPercentage(leftForSalary, bonusPercentage);
 
     return roundToThousands(salaryExcludingBonus)
 };
 
+const getShiftkeyShare = (totalIncome: number, companyMarginPercentage: number, fixedCosts: FixedCost[]) => {
+    let companyMarginPercentageDeducted = (totalIncome * (companyMarginPercentage / 100))
+    return deductFixedCosts(companyMarginPercentageDeducted, fixedCosts);
+}
+
 let getSalaryIncludingBonus = (baseSalary: number, bonusPercentage: number) => {
-    let salaryInclBonus = baseSalary + (baseSalary * (bonusPercentage/100));
+    let salaryInclBonus = baseSalary + (baseSalary * (bonusPercentage / 100));
     return roundToThousands(salaryInclBonus);
 };
 
-let rolesAndRates = [
+const rolesAndRates = [
     { role: "straighFromSchool", rate: 600 },
     { role: "junior 1-2 years", rate: 700 },
     { role: "medium 3-5 years", rate: 800 },
@@ -175,36 +196,28 @@ let rolesAndRates = [
 
 const employerContributionPercentage = 31.42;
 const pensionPercentage = 7.5;
-const companyMarginPercentage = 22;
+const companyMarginPercentage = 20;
 const bonusPercentage = 12;
 
-rolesAndRates.forEach((item) => {
-    let baseSalary = getBaseSalary(employerContributionPercentage, pensionPercentage, item.rate, yearly[0].totalHours, companyMarginPercentage, bonusPercentage);
-    let salaryInclBonus = getSalaryIncludingBonus(baseSalary, bonusPercentage);
-    console.log("/////////////////////  Role: " + item.role + " /////////////////////////////");
-    console.log("Rate: " + item.rate + "kr/h");
-    console.log("Base Salary: " + baseSalary);
-    console.log("Salary with bonus " + bonusPercentage + "% : " + salaryInclBonus);
-    console.log("pension: " + calculatePensionCostPerMonth(salaryInclBonus));
-    console.log("///////////////////////////////////////////////////////////////////////////");
-    console.log("");
-});
+export const getCalculationResults = () => {
+    const calculationResults: CalculationResult[] = [];
 
-export const getInfo = () => {
-    const info: { role: string; rate: number; baseSalary: number; salaryInclBonus: number; pension: number; }[] = [];
     rolesAndRates.forEach((item) => {
         let baseSalary = getBaseSalary(employerContributionPercentage, pensionPercentage, item.rate, yearly[0].totalHours, companyMarginPercentage, bonusPercentage);
         let salaryInclBonus = getSalaryIncludingBonus(baseSalary, bonusPercentage);
         let pension = calculatePensionCostPerMonth(salaryInclBonus);
 
-        info.push({
+        calculationResults.push({
             role: item.role,
             rate: item.rate,
             baseSalary,
             salaryInclBonus,
-            pension
+            pension,
+            fixedCosts: getFixedCosts(),
+            shiftkeyShare: getShiftkeyShare(item.rate * yearly[0].totalHours, companyMarginPercentage, getFixedCosts()),
+            totalDebited: getTotalIncome(yearly[0].totalHours, item.rate)
         });
     });
 
-    return info;
+    return calculationResults;
 }
