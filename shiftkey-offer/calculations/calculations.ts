@@ -6,8 +6,6 @@ type FixedCost = {
 };
 
 type CalculationResult = {
-    role: string;
-    rate: number;
     baseSalary: number;
     salaryInclBonus: number;
     pension: number;
@@ -186,38 +184,22 @@ let getSalaryIncludingBonus = (baseSalary: number, bonusPercentage: number) => {
     return roundToThousands(salaryInclBonus);
 };
 
-const rolesAndRates = [
-    { role: "straighFromSchool", rate: 600 },
-    { role: "junior 1-2 years", rate: 700 },
-    { role: "medium 3-5 years", rate: 800 },
-    { role: "senior 6-8 years", rate: 900 },
-    { role: "expert 8+ years", rate: 1150 },
-];
-
 const employerContributionPercentage = 31.42;
 const pensionPercentage = 7.5;
 const companyMarginPercentage = 20;
 const bonusPercentage = 12;
 
-export const getCalculationResults = () => {
-    const calculationResults: CalculationResult[] = [];
-
-    rolesAndRates.forEach((item) => {
-        let baseSalary = getBaseSalary(employerContributionPercentage, pensionPercentage, item.rate, yearly[0].totalHours, companyMarginPercentage, bonusPercentage);
+export const getCalculationResults = (rate: number): CalculationResult => {
+        let baseSalary = getBaseSalary(employerContributionPercentage, pensionPercentage, rate, yearly[0].totalHours, companyMarginPercentage, bonusPercentage);
         let salaryInclBonus = getSalaryIncludingBonus(baseSalary, bonusPercentage);
         let pension = calculatePensionCostPerMonth(salaryInclBonus);
 
-        calculationResults.push({
-            role: item.role,
-            rate: item.rate,
+        return {
             baseSalary,
             salaryInclBonus,
             pension,
             fixedCosts: getFixedCosts(),
-            shiftkeyShare: getShiftkeyShare(item.rate * yearly[0].totalHours, companyMarginPercentage, getFixedCosts()),
-            totalDebited: getTotalIncome(yearly[0].totalHours, item.rate)
-        });
-    });
-
-    return calculationResults;
+            shiftkeyShare: getShiftkeyShare(rate * yearly[0].totalHours, companyMarginPercentage, getFixedCosts()),
+            totalDebited: getTotalIncome(yearly[0].totalHours, rate)
+        }
 }

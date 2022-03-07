@@ -3,9 +3,11 @@ import Head from 'next/head'
 import Image from 'next/image'
 import React, { useState } from 'react';
 import { getCalculationResults } from '../calculations/calculations';
+import rolesAndRates from '../calculations/roles';
 
 const Home: NextPage = () => {
-  const [calculationResults, setCount] = useState(getCalculationResults());
+  const [calculationResult, setCalculationResult] = useState(getCalculationResults(600));
+  const [roles, setRoles] = useState(rolesAndRates);
 
   return (
     <div className='container mx-auto'>
@@ -15,18 +17,15 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main >
+        <div>{JSON.stringify(roles)}</div>
         <div className='grid grid-cols-12'>
-          {calculationResults.map(calculationResult => (
-            <div className='shadow px-4 py-8 border mx-4 my-4 col-span-6 sm:col-span-4 md:col-span-2 overflow-hidden' key={calculationResult.role}>
-              <div>{calculationResult.role}</div>
-              <div>{calculationResult.rate}</div>
+            <div className='shadow px-4 py-8 border mx-4 my-4 col-span-6 sm:col-span-4 md:col-span-2 overflow-hidden'>
               <div>{calculationResult.baseSalary}</div>
               <div>{calculationResult.salaryInclBonus}</div>
               <div>{calculationResult.pension}</div>
               <div>{calculationResult.shiftkeyShare}</div>
               <div>{calculationResult.shiftkeyShare / calculationResult.totalDebited}</div>
             </div>
-          ))}
         </div>
       </main>
       <footer>
