@@ -2,12 +2,13 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import React, { useState } from 'react';
-import { getCalculationResults } from '../calculations/calculations';
-import rolesAndRates from '../calculations/roles';
+import { getCalculationResults } from '../services/calculationService';
+import getRoles from '../services/rolesService';
+import Selector from '../components/Selector';
 
 const Home: NextPage = () => {
   const [calculationResult, setCalculationResult] = useState(getCalculationResults(600));
-  const [roles, setRoles] = useState(rolesAndRates);
+  const [roles, setRoles] = useState(getRoles);
 
   return (
     <div className='container mx-auto'>
@@ -17,6 +18,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main >
+        <Selector roles={roles} />
         <div>{JSON.stringify(roles)}</div>
         <div className='grid grid-cols-12'>
             <div className='shadow px-4 py-8 border mx-4 my-4 col-span-6 sm:col-span-4 md:col-span-2 overflow-hidden'>

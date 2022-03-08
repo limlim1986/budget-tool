@@ -1,18 +1,6 @@
 import _ from "lodash";
+import { CalculationResult, FixedCost } from "../types/Types";
 
-type FixedCost = {
-    name: string;
-    amount: number;
-};
-
-type CalculationResult = {
-    baseSalary: number;
-    salaryInclBonus: number;
-    pension: number;
-    fixedCosts: FixedCost[];
-    shiftkeyShare: number;
-    totalDebited: number;
-};
 
 const calculatePensionCostPerMonth = (salary: number) => {
     const incomeBaseAmount = 71000;
