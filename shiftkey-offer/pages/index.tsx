@@ -9,6 +9,7 @@ import Selector from '../components/Selector';
 const Home: NextPage = () => {
   const [calculationResult, setCalculationResult] = useState(getCalculationResults(600));
   const [roles, setRoles] = useState(getRoles);
+  const [selectedRole, setSelectedRole] = useState(roles[0]) 
 
   return (
     <div className='container mx-auto'>
@@ -18,7 +19,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main >
-        <Selector roles={roles} />
+        <Selector roles={roles} selectedRole={selectedRole} setSelectedRole={setSelectedRole} />
         <div>{JSON.stringify(roles)}</div>
         <div className='grid grid-cols-12'>
             <div className='shadow px-4 py-8 border mx-4 my-4 col-span-6 sm:col-span-4 md:col-span-2 overflow-hidden'>
