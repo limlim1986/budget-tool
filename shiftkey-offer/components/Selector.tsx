@@ -16,14 +16,15 @@ const Selector = ({ roles, selectedRole, setSelectedRole }: SelectorProps) => {
     setSelectedRole(role);
   }
 
-  return (<div className='flex'>
-    <div>{JSON.stringify(selectedRole)}</div>
+  return (<div className='flex flex-col sm:flex-row'>
     {roles.map((role, i) => (
+
       <button onClick={({ currentTarget }) => setRole(currentTarget)}
-        className='flex-1 border'
+        className={`text-center border-blue-300 border-2 text-white rounded-full flex-1 ${selectedRole.roleName === role.roleName ? "bg-blue-800 " : "bg-blue-500"}`}
         key={role.roleName}
         id={role.roleName}>{role.roleName}
       </button>
+
     ))}
   </div>)
 }
