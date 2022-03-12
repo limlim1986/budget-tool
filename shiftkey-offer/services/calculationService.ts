@@ -174,20 +174,20 @@ let getSalaryIncludingBonus = (baseSalary: number, bonusPercentage: number) => {
 
 const employerContributionPercentage = 31.42;
 const pensionPercentage = 7.5;
-const companyMarginPercentage = 20;
+const companyMarginPercentage = 22;
 const bonusPercentage = 12;
 
 export const getCalculationResults = (rate: number): CalculationResult => {
-        let baseSalary = getBaseSalary(employerContributionPercentage, pensionPercentage, rate, yearly[0].totalHours, companyMarginPercentage, bonusPercentage);
-        let salaryInclBonus = getSalaryIncludingBonus(baseSalary, bonusPercentage);
-        let pension = calculatePensionCostPerMonth(salaryInclBonus);
+    let baseSalary = getBaseSalary(employerContributionPercentage, pensionPercentage, rate, yearly[0].totalHours, companyMarginPercentage, bonusPercentage);
+    let salaryInclBonus = getSalaryIncludingBonus(baseSalary, bonusPercentage);
+    let pension = calculatePensionCostPerMonth(salaryInclBonus);
 
-        return {
-            baseSalary,
-            salaryInclBonus,
-            pension,
-            fixedCosts: getFixedCosts(),
-            shiftkeyShare: getShiftkeyShare(rate * yearly[0].totalHours, companyMarginPercentage, getFixedCosts()),
-            totalDebited: getTotalIncome(yearly[0].totalHours, rate)
-        }
+    return {
+        baseSalary,
+        salaryInclBonus,
+        pension,
+        fixedCosts: getFixedCosts(),
+        shiftkeyShare: getShiftkeyShare(rate * yearly[0].totalHours, companyMarginPercentage, getFixedCosts()),
+        totalDebited: getTotalIncome(yearly[0].totalHours, rate)
+    }
 }
