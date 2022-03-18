@@ -55,15 +55,15 @@ const Home: NextPage = () => {
         </div>
         <div>
           <Selector selectableItems={roles.map(getSelectableItem)} selectedItem={{ id: selectedRole.roleName, displayText: selectedRole.roleName }} setSelectedItem={setSelectedItem} />
-          <div className='border h-12 flex items-center px-2'>
-            <span>{selectedRole.description}</span>
+          <div className='h-16 flex items-center'>
+            <span className='basis-full'>{selectedRole.description}</span>
           </div>
-          <div className='flex flex-col shadow border-2'>
-            <div className='flex'>
-              <div className='flex flex-wrap flex-1 border border-gray-300'>
+          <div className='flex flex-col md:flex-row'>
+            <div className='flex flex-1 my-4'>
+              <div className='flex flex-wrap flex-1'>
                 <h2 className='text-center basis-full'>Mentor</h2>
                 <div className='flex justify-center basis-full'>
-                  <div className='w-28 sm:w-28 md:w-40 lg:w-52 xl:w-64 2xl:w-72'>
+                  <div className='w-40 sm:w-52 md:w-56 lg:w-60 xl:w-64 2xl:w-72'>
                     <Image
                       layout='responsive'
                       src="https://via.placeholder.com/100"
@@ -73,23 +73,45 @@ const Home: NextPage = () => {
                     />
                   </div>
                 </div>
-                <h2 className='basis-full text-center'>Mentor Mentorsson</h2>
+                <div className='basis-full'>
+                  <h2 className='text-center'>Name: Mentor Mentorsson</h2>
+                  <h2 className='text-center'>Expertise: Architecture</h2>
+                  <h2 className='text-center'>Personality: Driven</h2>
+                  <h2 className='text-center'>Tagline: There is always something new to learn</h2>
+                </div>
               </div>
-              <div className='flex-1 border border-gray-300'>
-                <h2>Academy</h2>
+            </div>
+            <div className='flex-1 my-4'>
+              <div className='flex'>
+                <h2 className='flex-1 text-xl'>Base Salary:</h2>
+                <h2 className='flex-1 text-xl'>{calculationResult.baseSalary} SEK/Month</h2>
+              </div>
+              <div className='flex'>
+                <h2 className='flex-1 text-xl'>Salary Incl. Bonus:</h2>
+                <h2 className='flex-1 text-xl'>{calculationResult.salaryInclBonus} SEK/Month</h2>
+              </div>
+              <div className='flex'>
+                <h2 className='flex-1 text-xl'>Pension</h2>
+                <h2 className='flex-1 text-xl'>{calculationResult.pension} SEK/Month</h2>
               </div>
             </div>
-            <div className='flex'>
-              <h2 className='flex-1 text-xl'>Base Salary:</h2>
-              <h2 className='flex-1 text-xl'>{calculationResult.baseSalary} SEK/Month</h2>
+            <div className='flex-1 my-4'>
+              <h2 className='basis-full'>Academy description</h2>
+              <div className='basis-full'>
+                <ul>
+                  <li>ups 1</li>
+                  <li>usp 2</li>
+                  <li>usp 3</li>
+                </ul>
+              </div>
             </div>
-            <div className='flex'>
-              <h2 className='flex-1 text-xl'>Salary Incl. Bonus:</h2>
-              <h2 className='flex-1 text-xl'>{calculationResult.salaryInclBonus} SEK/Month</h2>
-            </div>
-            <div className='flex'>
-              <h2 className='flex-1 text-xl'>Pension</h2>
-              <h2 className='flex-1 text-xl'>{calculationResult.pension} SEK/Month</h2>
+            <div className='flex-1 my-4'>
+              <h2>Mentorship description</h2>
+              <ul>
+                <li>ups 1</li>
+                <li>usp 2</li>
+                <li>usp 3</li>
+              </ul>
             </div>
           </div>
         </div>
