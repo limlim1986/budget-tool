@@ -56,18 +56,41 @@ const Home: NextPage = () => {
         <div>
           <Selector selectableItems={roles.map(getSelectableItem)} selectedItem={{ id: selectedRole.roleName, displayText: selectedRole.roleName }} setSelectedItem={setSelectedItem} />
           <div className='border h-12 flex items-center px-2'>
-            <span>Description of the selected role</span>
+            <span>{selectedRole.description}</span>
           </div>
-          <div className='flex flex-col shadow border-2 overflow-hidden justify-center'>
+          <div className='flex flex-col shadow border-2'>
             <div className='flex'>
-              <h2 className='flex-1'>Mentor</h2>
-              <h2 className='flex-1'>Academy</h2>
+              <div className='flex flex-wrap flex-1 border border-gray-300'>
+                <h2 className='text-center basis-full'>Mentor</h2>
+                <div className='flex justify-center basis-full'>
+                  <div className='w-28 sm:w-28 md:w-40 lg:w-52 xl:w-64 2xl:w-72'>
+                    <Image
+                      layout='responsive'
+                      src="https://via.placeholder.com/100"
+                      alt="mentor image"
+                      width="100"
+                      height="100"
+                    />
+                  </div>
+                </div>
+                <h2 className='basis-full text-center'>Mentor Mentorsson</h2>
+              </div>
+              <div className='flex-1 border border-gray-300'>
+                <h2>Academy</h2>
+              </div>
             </div>
-            <div className=''>{calculationResult.baseSalary}</div>
-            <div>{calculationResult.salaryInclBonus}</div>
-            <div>{calculationResult.pension}</div>
-            <div>{calculationResult.shiftkeyShare}</div>
-            <div>{calculationResult.shiftkeyShare / calculationResult.totalDebited}</div>
+            <div className='flex'>
+              <h2 className='flex-1 text-xl'>Base Salary:</h2>
+              <h2 className='flex-1 text-xl'>{calculationResult.baseSalary} SEK/Month</h2>
+            </div>
+            <div className='flex'>
+              <h2 className='flex-1 text-xl'>Salary Incl. Bonus:</h2>
+              <h2 className='flex-1 text-xl'>{calculationResult.salaryInclBonus} SEK/Month</h2>
+            </div>
+            <div className='flex'>
+              <h2 className='flex-1 text-xl'>Pension</h2>
+              <h2 className='flex-1 text-xl'>{calculationResult.pension} SEK/Month</h2>
+            </div>
           </div>
         </div>
       </main>
