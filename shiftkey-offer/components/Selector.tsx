@@ -22,7 +22,7 @@ const Selector = ({ selectableItems, selectedItem, setSelectedItem }: SelectorPr
     }
   }
 
-  return (<div className='flex flex-wrap flex-row'>
+  return (<div className='flex flex-wrap flex-row gap-1'>
     {selectableItems.map((item, i) => (
 
       <button onClick={({ currentTarget }) => setClickedItem(currentTarget)}

@@ -41,7 +41,7 @@ const Home: NextPage = () => {
         <meta name="description" content="Example of employee offer at shiftkey" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className=''>
+      <main className='max-w-screen-xl'>
         <div className='flex items-center'>
           <Image
             src="https://via.placeholder.com/88"
@@ -58,30 +58,28 @@ const Home: NextPage = () => {
           <div className='h-16 flex items-center'>
             <span className='basis-full'>{selectedRole.description}</span>
           </div>
-          <div className='flex flex-col md:flex-row'>
-            <div className='flex flex-1 my-4'>
+          <div className='flex gap-4 flex-wrap flex-row'>
+            <div className='flex w-96 my-4 shadow-md rounded-md overflow-hidden'>
               <div className='flex flex-wrap flex-1'>
-                <h2 className='text-center basis-full'>Mentor</h2>
                 <div className='flex justify-center basis-full'>
-                  <div className='w-40 sm:w-52 md:w-56 lg:w-60 xl:w-64 2xl:w-72'>
+                  <div className='w-full'>
                     <Image
                       layout='responsive'
-                      src="https://via.placeholder.com/100"
+                      src="https://via.placeholder.com/384x160"
                       alt="mentor image"
-                      width="100"
-                      height="100"
+                      width="384"
+                      height="160"
                     />
                   </div>
                 </div>
-                <div className='basis-full'>
-                  <h2 className='text-center'>Name: Mentor Mentorsson</h2>
-                  <h2 className='text-center'>Expertise: Architecture</h2>
-                  <h2 className='text-center'>Personality: Driven</h2>
-                  <h2 className='text-center'>Tagline: There is always something new to learn</h2>
+                <div className='flex justify-center m-4 flex-wrap'>
+                  <h2 className='text-2xl w-full'>Mentor</h2>
+                  <span className='w-full'>some tagline for this mentor describing something</span>
+                  <div className='w-24 text-center'>I</div>
                 </div>
               </div>
             </div>
-            <div className='flex-1 my-4'>
+            <div className='flex-1 my-4 border-black shadow-md rounded'>
               <div className='flex'>
                 <h2 className='flex-1 text-xl'>Base Salary:</h2>
                 <h2 className='flex-1 text-xl'>{calculationResult.baseSalary} SEK/Month</h2>
@@ -95,7 +93,7 @@ const Home: NextPage = () => {
                 <h2 className='flex-1 text-xl'>{calculationResult.pension} SEK/Month</h2>
               </div>
             </div>
-            <div className='flex-1 my-4'>
+            <div className='flex-1 my-4 border-black shadow-md rounded'>
               <h2 className='basis-full'>Academy description</h2>
               <div className='basis-full'>
                 <ul>
@@ -105,7 +103,7 @@ const Home: NextPage = () => {
                 </ul>
               </div>
             </div>
-            <div className='flex-1 my-4'>
+            <div className='flex-1 my-4 border-black shadow-md rounded'>
               <h2>Mentorship description</h2>
               <ul>
                 <li>ups 1</li>
