@@ -9,10 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "lodash": "^4.17.21",
     "next": "12.1.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "lodash": "^4.17.21"
+    "react-icons": "^4.3.1"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.179",

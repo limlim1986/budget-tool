@@ -6,6 +6,7 @@ import { getCalculationResults } from '../services/calculationService';
 import getRoles from '../services/rolesService';
 import Selector, { SelectorItem } from '../components/Selector';
 import { Role } from '../types/Types';
+import { IoIosArrowDown } from 'react-icons/io'
 
 const Home: NextPage = () => {
   const [calculationResult, setCalculationResult] = useState(getCalculationResults(600));
@@ -58,8 +59,8 @@ const Home: NextPage = () => {
           <div className='h-16 flex items-center'>
             <span className='basis-full'>{selectedRole.description}</span>
           </div>
-          <div className='flex gap-4 flex-wrap flex-row'>
-            <div className='flex w-96 my-4 shadow-md rounded-md overflow-hidden'>
+          <div className='flex gap-4 flex-wrap flex-row justify-center'>
+            <div className='flex basis-[400px] md:basis-[360px] my-4 shadow-md rounded-md overflow-hidden'>
               <div className='flex flex-wrap flex-1'>
                 <div className='flex justify-center basis-full'>
                   <div className='w-full'>
@@ -72,14 +73,16 @@ const Home: NextPage = () => {
                     />
                   </div>
                 </div>
-                <div className='flex justify-center m-4 flex-wrap'>
+                <div className='flex items-center m-4 flex-wrap flex-col w-full'>
                   <h2 className='text-2xl w-full'>Mentor</h2>
-                  <span className='w-full'>some tagline for this mentor describing something</span>
-                  <div className='w-24 text-center'>I</div>
+                  <span className='w-full mt-2'>some tagline for this mentor describing something</span>
+                  <div className='flex mt-4 justify-center items-center self-end w-12 h-12 hover:bg-gray-200 rounded-full'>
+                    <IoIosArrowDown style={{ color: 'grey', fontSize: '24px' }} />
+                  </div>
                 </div>
               </div>
             </div>
-            <div className='flex-1 my-4 border-black shadow-md rounded'>
+            <div className='basis-[400px] md:basis-[360px] my-4 shadow-md rounded-md overflow-hidden'>
               <div className='flex'>
                 <h2 className='flex-1 text-xl'>Base Salary:</h2>
                 <h2 className='flex-1 text-xl'>{calculationResult.baseSalary} SEK/Month</h2>
@@ -93,7 +96,7 @@ const Home: NextPage = () => {
                 <h2 className='flex-1 text-xl'>{calculationResult.pension} SEK/Month</h2>
               </div>
             </div>
-            <div className='flex-1 my-4 border-black shadow-md rounded'>
+            <div className='w-96 my-4 shadow-md rounded-md overflow-hidden'>
               <h2 className='basis-full'>Academy description</h2>
               <div className='basis-full'>
                 <ul>
@@ -103,7 +106,7 @@ const Home: NextPage = () => {
                 </ul>
               </div>
             </div>
-            <div className='flex-1 my-4 border-black shadow-md rounded'>
+            <div className='w-96 my-4 shadow-md rounded-md overflow-hidden'>
               <h2>Mentorship description</h2>
               <ul>
                 <li>ups 1</li>
