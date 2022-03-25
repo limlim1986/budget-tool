@@ -50,7 +50,7 @@ const Home: NextPage = () => {
             width="52"
             height="52"
           />
-          <div className='flex-1 p-2'>
+          <div className='flex-1 p-2 my-4'>
             <h2 className='text-4xl'>Shiftkey Offer</h2>
           </div>
         </div>
@@ -59,8 +59,8 @@ const Home: NextPage = () => {
           <div className='h-16 flex items-center'>
             <span className='basis-full'>{selectedRole.description}</span>
           </div>
-          <div className='flex gap-4 flex-wrap flex-row justify-center'>
-            <div className='flex basis-[400px] md:basis-[360px] my-4 shadow-md rounded-md overflow-hidden'>
+          <div className='flex gap-6 flex-wrap flex-row justify-center'>
+            <div className='flex basis-[400px] md:basis-[360px] shadow-md rounded-md overflow-hidden'>
               <div className='flex flex-wrap flex-1'>
                 <div className='flex justify-center basis-full'>
                   <div className='w-full'>
@@ -73,7 +73,7 @@ const Home: NextPage = () => {
                     />
                   </div>
                 </div>
-                <div className='flex items-center m-4 flex-wrap flex-col w-full'>
+                <div className='flex items-center p-4 flex-wrap flex-col w-full'>
                   <h2 className='text-2xl w-full'>Mentor</h2>
                   <span className='w-full mt-2'>some tagline for this mentor describing something</span>
                   <div className='flex mt-4 justify-center items-center self-end w-12 h-12 hover:bg-gray-200 rounded-full'>
@@ -82,37 +82,42 @@ const Home: NextPage = () => {
                 </div>
               </div>
             </div>
-            <div className='basis-[400px] md:basis-[360px] my-4 shadow-md rounded-md overflow-hidden'>
-              <div className='flex'>
+            <div className='basis-[400px] md:basis-[360px] shadow-md rounded-md overflow-hidden p-4'>
+              <h2 className='text-2xl w-full'>Compensation</h2>
+              <div className='flex mt-2'>
                 <h2 className='flex-1 text-xl'>Base Salary:</h2>
                 <h2 className='flex-1 text-xl'>{calculationResult.baseSalary} SEK/Month</h2>
               </div>
-              <div className='flex'>
+              <div className='flex mt-2'>
                 <h2 className='flex-1 text-xl'>Salary Incl. Bonus:</h2>
                 <h2 className='flex-1 text-xl'>{calculationResult.salaryInclBonus} SEK/Month</h2>
               </div>
-              <div className='flex'>
+              <div className='flex mt-2'>
                 <h2 className='flex-1 text-xl'>Pension</h2>
                 <h2 className='flex-1 text-xl'>{calculationResult.pension} SEK/Month</h2>
               </div>
             </div>
-            <div className='w-96 my-4 shadow-md rounded-md overflow-hidden'>
-              <h2 className='basis-full'>Academy description</h2>
-              <div className='basis-full'>
-                <ul>
-                  <li>ups 1</li>
-                  <li>usp 2</li>
-                  <li>usp 3</li>
-                </ul>
+            <div className='flex basis-[400px] md:basis-[360px] shadow-md rounded-md overflow-hidden flex-col p-4'>
+              <h2 className='text-2xl w-full'>Academy</h2>
+              <ul className='mt-2'>
+                <li>ups 1</li>
+                <li>ups 2</li>
+                <li>ups 3</li>
+              </ul>
+              <div className='flex mt-4 justify-center items-center self-end w-12 h-12 hover:bg-gray-200 rounded-full'>
+                <IoIosArrowDown style={{ color: 'grey', fontSize: '24px' }} />
               </div>
             </div>
-            <div className='w-96 my-4 shadow-md rounded-md overflow-hidden'>
-              <h2>Mentorship description</h2>
-              <ul>
+            <div className='flex basis-[400px] md:basis-[360px] shadow-md rounded-md overflow-hidden flex-col p-4'>
+              <h2 className='text-2xl w-full'>Mentorship</h2>
+              <ul className='mt-2'>
                 <li>ups 1</li>
-                <li>usp 2</li>
-                <li>usp 3</li>
+                <li>ups 2</li>
+                <li>ups 3</li>
               </ul>
+              <div className='flex mt-4 justify-center items-center self-end w-12 h-12 hover:bg-gray-200 rounded-full'>
+                <IoIosArrowDown style={{ color: 'grey', fontSize: '24px' }} />
+              </div>
             </div>
           </div>
         </div>
