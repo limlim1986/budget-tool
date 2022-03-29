@@ -3,7 +3,7 @@ import IMAGE from "./react.jpg"
 import { ClickCounter } from "./ClickCounter"
 
 export const App = () => {
-  const nema = "testing";
+  const nema = 'testing';
 	return (
 		<>
 			<h1>
